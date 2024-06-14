@@ -1,0 +1,19 @@
+ULOG3 = uigetdir('SELECT THE INPUT FOLDER PATH');
+THERMALIMG = uigetdir('SELECT OUTPUT PATH');
+while true
+    files = dir(fullfile(ULOG3, '*.jpg'));
+    if ~isempty(files)
+        parfor i = 1:numel(files)
+            filename = files(i).name;
+            filepath = fullfile(ULOG3, filename);
+            inptd_img = imread(filepath);
+            grayscale_img_conersion = rgb2gray(inptd_img);
+            thermalcolormaptoconvert = jet(256);
+            out_img = ind2rgb(gray2ind(grayscale_img_conersion, 256), thermalcolormaptoconvert);
+            [~, name, ext] = fileparts(filename);
+            out_Filename = [name '_Thermal' ext];
+            imwrite(out_img, fullfile(THERMALIMG, out_Filename));
+        end
+    end
+    pause(5);
+end
